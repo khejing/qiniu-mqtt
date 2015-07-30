@@ -1,0 +1,5 @@
+module.exports = {
+    'ACCESS_KEY': '<Your Access Key>',
+    'SECRET_KEY': '<Your Secret Key>',
+    'Bucket_Name': '<Your Bucket Name>'
+};

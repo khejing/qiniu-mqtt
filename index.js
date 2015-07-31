@@ -27,12 +27,12 @@ mqttClientInstance.on('message', function(messageTopic, data) {
 	console.log("recv msg: "+data);
 	var msg = JSON.parse(data);
 	if(msg.request === "uptoken"){
-		mqttClientInstance.publish(msg.clientId, JSON.stringify({uptoken: uptoken.token()}));
-	} else if(msg.request === "downtoken"){
+		mqttClientInstance.publish(msg.clientId, JSON.stringify({qiniu: "UpToken", uptoken: uptoken.token()}));
+	} else if(msg.request === "downurl"){
 		var key = msg.key;
         var baseUrl = qiniu.rs.makeBaseUrl(config.Domain, key);
         var policy = new qiniu.rs.GetPolicy();
-        mqttClientInstance.publish(msg.clientId, JSON.stringify({url: policy.makeRequest(baseUrl)}));
+        mqttClientInstance.publish(msg.clientId, JSON.stringify({qiniu: "DownURL", url: policy.makeRequest(baseUrl)}));
 	} else {
 		console.log("unknown msg");
 	}	

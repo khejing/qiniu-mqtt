@@ -7,6 +7,7 @@ qiniu.conf.SECRET_KEY = config.SECRET_KEY;
 
 var uptoken = new qiniu.rs.PutPolicy2({
 	scope: config.Bucket_Name,
+	expires: 31536000,
 	returnBody: {
 		"success": true
 	}
@@ -28,9 +29,8 @@ mqttClientInstance.on('message', function(messageTopic, data) {
 	if(msg.request === "uptoken"){
 		mqttClientInstance.publish(msg.clientId, JSON.stringify({uptoken: uptoken.token()}));
 	} else if(msg.request === "downtoken"){
-		var key = msg.key,
-		    domain = msg.domain;//domain must not contain http:// or https://, and must not contain the last "/" too
-        var baseUrl = qiniu.rs.makeBaseUrl(domain, key);
+		var key = msg.key;
+        var baseUrl = qiniu.rs.makeBaseUrl(config.Domain, key);
         var policy = new qiniu.rs.GetPolicy();
         mqttClientInstance.publish(msg.clientId, JSON.stringify({url: policy.makeRequest(baseUrl)}));
 	} else {

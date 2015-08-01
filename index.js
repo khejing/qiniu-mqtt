@@ -8,9 +8,7 @@ qiniu.conf.SECRET_KEY = config.SECRET_KEY;
 var uptoken = new qiniu.rs.PutPolicy2({
 	scope: config.Bucket_Name,
 	expires: 31536000,
-	returnBody: {
-		"success": true
-	}
+	returnBody: '{"success":true}'
 });
 
 var topic = "qiniu";

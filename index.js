@@ -5,9 +5,11 @@ var config = require('./config.js');
 qiniu.conf.ACCESS_KEY = config.ACCESS_KEY;
 qiniu.conf.SECRET_KEY = config.SECRET_KEY;
 
+var expireTime = 31536000;
+
 var uptoken = new qiniu.rs.PutPolicy2({
 	scope: config.Bucket_Name,
-	expires: 31536000,
+	expires: expireTime,
 	returnBody: '{"success":true, "key": $(key)}'
 });
 
@@ -29,7 +31,7 @@ mqttClientInstance.on('message', function(messageTopic, data) {
 	} else if(msg.request === "downurl"){
 		var key = msg.key;
         var baseUrl = qiniu.rs.makeBaseUrl(config.Domain, key);
-        var policy = new qiniu.rs.GetPolicy();
+        var policy = new qiniu.rs.GetPolicy(expireTime);
         mqttClientInstance.publish(msg.clientId, JSON.stringify({qiniu: "DownURL", url: policy.makeRequest(baseUrl)}));
 	} else {
 		console.log("unknown msg");
